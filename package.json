@@ -1,0 +1,25 @@
+{
+  "name": "aqa",
+  "version": "1.0.0",
+  "description": "тест",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Iraklyweb/aqa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Iraklyweb/aqa/issues"
+  },
+  "homepage": "https://github.com/Iraklyweb/aqa#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^24.1.0"
+  }
+}
