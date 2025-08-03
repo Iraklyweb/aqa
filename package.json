@@ -6,7 +6,11 @@
   "directories": {
     "test": "test"
   },
-  "scripts": {},
+  "scripts": {
+    "pretest": "",
+    "test": "npx playwright.config.js",
+    "posttest": ""
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Iraklyweb/aqa.git"
