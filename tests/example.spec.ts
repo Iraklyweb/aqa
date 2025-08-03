@@ -20,8 +20,6 @@ test('get started link', async ({ page }) => {
 
 import { test, expect } from '@playwright/test';
 
-
-
 test('Позитивный сценарий логина', async ({ page }) => {
   await page.goto('https://www.saucedemo.com/');
   await page.fill('//input[@placeholder=\'Username\']', 'standard_user');
