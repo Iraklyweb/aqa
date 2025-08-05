@@ -7,9 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "pretest": "",
-    "test": "npx playwright.config.js",
-    "posttest": ""
+    "test": "npx playwright.config.js"
   },
   "repository": {
     "type": "git",
