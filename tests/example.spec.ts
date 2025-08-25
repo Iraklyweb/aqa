@@ -51,4 +51,20 @@ test('Проверка фильтрации товаров', async ({ page }) =>
     await page.click('.select_container');
     await page.selectOption('[data-test="product-sort-container"]', 'lohi');
     // проверить порядок цен/in progress
+    const prices = await page.locator('[data-test="inventory-item-price"]').allTextContents();
+    console.log('это будет цены в долларах', prices);
+    const  values = prices.map(
+        function (value, index, array){
+            const textWithoutPrice = value.replace('$', '')
+            const price = parseFloat(textWithoutPrice);
+            return price;
+        }
+    );
+    console.log('Это будет числа',values);
+
+    values.forEach((value, index,array) => {
+        if (index !== array.length -1) {
+            expect(value).toBeLessThanOrEqual(array[index + 1]);
+        }
+    });
 });
