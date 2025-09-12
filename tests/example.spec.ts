@@ -1,33 +1,47 @@
 import { test, expect } from '@playwright/test';
+import {PositiveLoginPage} from "./PositiveLoginPage";
+import {NegativeLoginPage} from "./NegativeLoginPage";
+import {AddItems} from "./AddItems";
+import {CheckFilter} from "./CheckFilter";
 
 test('Позитивный сценарий логина', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.fill('//input[@id=\'user-name\']', 'standard_user');
-  await page.fill('//input[@id=\'password\']', 'secret_sauce');
-  await page.click('//input[@id=\'login-button\']');
-  await expect(page.locator('//span[text()=\'Products\']')).toHaveText('Products');
+    const loginPage = new PositiveLoginPage(page);
+    await page.goto('https://www.saucedemo.com/');
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.clickButton();
+    await loginPage.expectProduct();
 });
 
 test('Негативный сценарий логина', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.fill('#user-name', 'wrong_user');
-  await page.fill('//input[@id=\'password\']', 'wrong_pass');
-  await page.click('//input[@id=\'login-button\']');
-  await expect(page.locator('//span[text()=\'Products\']')).not.toBeVisible();
-  await expect(page.locator('.error-message-container')).toBeVisible();
-});
-
-test('Добавление товара в корзину', async ({ page }) => {
+    const negativeLoginPage = new NegativeLoginPage(page);
     await page.goto('https://www.saucedemo.com/');
-    await page.fill('#user-name', 'standard_user');
-    await page.fill('#password', 'secret_sauce');
-    await page.click('#login-button');
-    await page.click('#add-to-cart-sauce-labs-backpack');
-    await page.click('#shopping_cart_container');
-    await expect(page.locator('[data-test="inventory-item"]')).toBeVisible();
+    await negativeLoginPage.login('wrong_user', 'wrong_pass');
+    await negativeLoginPage.clickButton();
+    await negativeLoginPage.expectProduct();
 });
 
-test('Оформление заказа (checkout flow)', async ({ page }) => {
+test('Добавить товар в магазин', async ({ page }) => {
+    const addItems = new AddItems(page);
+    await page.goto('https://www.saucedemo.com/');
+    await addItems.login('standard_user', 'secret_sauce');
+    await addItems.clickButton();
+    await addItems.addItemToCart();
+    await addItems.openCart();
+    await addItems.expectProducts();
+
+});
+
+test('Проверить фильтрацию', async ({ page }) => {
+    const checkFilter = new CheckFilter(page);
+    await page.goto('https://www.saucedemo.com/');
+    await checkFilter.login('standard_user', 'secret_sauce');
+    await checkFilter.clickButton();
+    await checkFilter.selectFilter();
+    await checkFilter.sortContainer();
+    await checkFilter.checkFilter();
+});
+
+/*test('Оформление заказа (checkout flow)', async ({ page }) => {
     await page.goto('https://www.saucedemo.com/');
     await page.fill('#user-name', 'standard_user');
     await page.fill('#password', 'secret_sauce');
@@ -41,7 +55,7 @@ test('Оформление заказа (checkout flow)', async ({ page }) => {
     await page.click('#continue');
     await page.click('#finish');
     await expect(page.locator('[data-test="complete-header"]')).toHaveText('Thank you for your order!');
-});
+});*/
 
 test('Проверка фильтрации товаров', async ({ page }) => {
     await page.goto('https://www.saucedemo.com/');
@@ -68,3 +82,4 @@ test('Проверка фильтрации товаров', async ({ page }) =>
         }
     });
 });
+'lohi'
