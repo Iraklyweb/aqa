@@ -1,40 +1,43 @@
 import {test, expect, Page, Locator} from '@playwright/test';
 
-export class CheckFilter {
+export class Inventory {
 
     private readonly page: Page;
-    private readonly usernameInput: Locator;
-    private readonly passwordInput: Locator;
-    private readonly loginButton: Locator;
     private readonly filter: Locator;
     private readonly itemPrice: Locator;
     private readonly container: Locator;
+    private readonly addItem: Locator;
+    private readonly cart: Locator;
+    private readonly expectItem: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.usernameInput = page.locator('#user-name');
-        this.passwordInput = page.locator('#password');
-        this.loginButton = page.locator('#login-button');
         this.filter = page.locator('.select_container');
         this.container = page.locator('.product_sort_container');
         this.itemPrice = page.locator('.inventory_item_price');
-    }
-
-    async login(username: string, password: string) {
-        await this.usernameInput.fill(username);
-        await this.passwordInput.fill(password);
-    }
-
-    async clickButton() {
-        await this.loginButton.click();
+        this.addItem = page.locator('#add-to-cart-sauce-labs-backpack');
+        this.cart = page.locator('#shopping_cart_container');
+        this.expectItem = page.locator('[data-test="inventory-item"]');
     }
 
     async selectFilter() {
         await this.filter.click();
     }
 
-    async sortContainer() {
-        await this.container.selectOption( 'lohi');
+    async addItemToCart() {
+        await this.addItem.click();
+    }
+
+    async openCart() {
+        await this.cart.click();
+    }
+
+    async expectProducts() {
+        await expect(this.expectItem).toBeVisible();
+    }
+
+    async sortContainer(option: string) {
+        await this.container.selectOption( option);
     }
 
     async checkFilter() {

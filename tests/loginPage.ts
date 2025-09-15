@@ -1,19 +1,19 @@
 import {test, expect, Page, Locator} from '@playwright/test';
 
-export class PositiveLoginPage {
+export class LoginPage {
 
     private readonly page: Page;
     private readonly usernameInput: Locator;
     private readonly passwordInput: Locator;
     private readonly loginButton: Locator;
-    private readonly expectProducts: Locator;
+    private readonly title: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.usernameInput = page.locator('#user-name');
         this.passwordInput = page.locator('#password');
         this.loginButton = page.locator('#login-button');
-        this.expectProducts = page.locator('//span[text()=\'Products\']');
+        this.title = page.locator('//span[text()=\'Products\']');
     }
 
     async login(username: string, password: string) {
@@ -21,16 +21,18 @@ export class PositiveLoginPage {
         await this.passwordInput.fill(password);
     }
 
-    async clickButton() {
+    async clickLoginButton() {
         await this.loginButton.click();
     }
 
-    async expectProduct() {
-        await expect(this.expectProducts).toHaveText('Products');
+    async validateTitle() {
+        await expect(this.title).toHaveText('Products');
     }
 
+    async validateTitle() {
+        await expect(this.title).not.toBeVisible();
+    }
 }
-
 
 
 
