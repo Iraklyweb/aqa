@@ -8,7 +8,7 @@ export class Inventory {
     private readonly container: Locator;
     private readonly addItem: Locator;
     private readonly cart: Locator;
-    private readonly expectItem: Locator;
+    private readonly title: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -17,7 +17,7 @@ export class Inventory {
         this.itemPrice = page.locator('.inventory_item_price');
         this.addItem = page.locator('#add-to-cart-sauce-labs-backpack');
         this.cart = page.locator('#shopping_cart_container');
-        this.expectItem = page.locator('[data-test="inventory-item"]');
+        this.title = page.locator('//span[text()=\'Products\']');
     }
 
     async selectFilter() {
@@ -32,8 +32,12 @@ export class Inventory {
         await this.cart.click();
     }
 
-    async expectProducts() {
-        await expect(this.expectItem).toBeVisible();
+    async validateTitle() {
+        await expect(this.title).toHaveText('Products');
+    }
+
+    async invalidateElement() {
+        await expect(this.title).not.toBeVisible();
     }
 
     async sortContainer(option: string) {
