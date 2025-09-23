@@ -14,7 +14,6 @@ export class CartPage {
     private readonly finishButton : Locator;
     private readonly completionMessage : Locator;
 
-
     constructor(page: Page) {
         this.page = page;
         this.cart = page.locator('#shopping_cart_container');
@@ -37,7 +36,7 @@ export class CartPage {
         await this.addItem.click();
     }
 
-    async availabilityProductCard() {
+    async checkProductCardVisible() {
         await expect(this.productCard).toBeVisible();
     }
 

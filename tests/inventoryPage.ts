@@ -28,8 +28,8 @@ export class InventoryPage {
         await expect(this.title).not.toBeVisible();
     }
 
-    async selectingFilterValue(option: string) {
-        await this.container.selectOption( option);
+    async selectFilterValue(option: string) {
+        await this.container.selectOption(option);
     }
 
     async checkFilter() {

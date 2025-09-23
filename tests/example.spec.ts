@@ -29,7 +29,7 @@ test('Добавить товар в магазин', async ({ page }) => {
     await loginPage.clickLoginButton();
     await cart.addItemToCart();
     await cart.openCart();
-    await cart.availabilityProductCard();
+    await cart.checkProductCardVisible();
 });
 
 test('Оформление заказа (checkout flow)', async ({ page }) => {
@@ -54,6 +54,6 @@ test('Проверить фильтрацию', async ({ page }) => {
     await loginPage.login('standard_user', 'secret_sauce');
     await loginPage.clickLoginButton();
     await inventory.selectFilter();
-    await inventory.selectingFilterValue('lohi');
+    await inventory.selectFilterValue('lohi');
     await inventory.checkFilter();
 });
