@@ -6,14 +6,13 @@ export class LoginPage {
     private readonly usernameInput: Locator;
     private readonly passwordInput: Locator;
     private readonly loginButton: Locator;
-    private readonly addItem: Locator;
+
 
     constructor(page: Page) {
         this.page = page;
         this.usernameInput = page.locator('#user-name');
         this.passwordInput = page.locator('#password');
         this.loginButton = page.locator('#login-button');
-        this.addItem = page.locator('#add-to-cart-sauce-labs-backpack');
     }
 
     async login(username: string, password: string) {
@@ -25,9 +24,10 @@ export class LoginPage {
         await this.loginButton.click();
     }
 
-    async addItemToCart() {
-        await this.addItem.click();
+    async navigation() {
+        await this.page.goto('https://www.saucedemo.com/');
     }
+
 }
 
 
