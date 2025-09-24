@@ -1,54 +1,59 @@
 import { test, expect } from '@playwright/test';
+import {LoginPage} from "./loginPage";
+import {CartPage} from "./CartPage";
+import {InventoryPage} from "./inventoryPage";
 
 test('Позитивный сценарий логина', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.fill('//input[@id=\'user-name\']', 'standard_user');
-  await page.fill('//input[@id=\'password\']', 'secret_sauce');
-  await page.click('//input[@id=\'login-button\']');
-  await expect(page.locator('//span[text()=\'Products\']')).toHaveText('Products');
+    const loginPage = new LoginPage(page);
+    const inventory = new InventoryPage(page);
+    await loginPage.navigation();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.clickLoginButton();
+    await inventory.validateTitle();
 });
 
 test('Негативный сценарий логина', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.fill('#user-name', 'wrong_user');
-  await page.fill('//input[@id=\'password\']', 'wrong_pass');
-  await page.click('//input[@id=\'login-button\']');
-  await expect(page.locator('//span[text()=\'Products\']')).not.toBeVisible();
-  await expect(page.locator('.error-message-container')).toBeVisible();
+    const loginPage = new LoginPage(page);
+    const inventory = new InventoryPage(page);
+    await loginPage.navigation();
+    await loginPage.login('wrong_user', 'wrong_pass');
+    await loginPage.clickLoginButton();
+    await inventory.validateTitleBeNotVisible();
 });
 
-test('Добавление товара в корзину', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
-    await page.fill('#user-name', 'standard_user');
-    await page.fill('#password', 'secret_sauce');
-    await page.click('#login-button');
-    await page.click('#add-to-cart-sauce-labs-backpack');
-    await page.click('#shopping_cart_container');
-    await expect(page.locator('[data-test="inventory-item"]')).toBeVisible();
+test('Добавить товар в магазин', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const cart = new CartPage(page);
+    await loginPage.navigation();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.clickLoginButton();
+    await cart.addItemToCart();
+    await cart.openCart();
+    await cart.checkProductCardVisible();
 });
 
 test('Оформление заказа (checkout flow)', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
-    await page.fill('#user-name', 'standard_user');
-    await page.fill('#password', 'secret_sauce');
-    await page.click('#login-button');
-    await page.click('#add-to-cart-sauce-labs-backpack');
-    await page.click('#shopping_cart_container');
-    await page.click('#checkout');
-    await page.fill('#first-name', 'TestFirstName');
-    await page.fill('#last-name', 'TestLastName');
-    await page.fill('#postal-code', '30301');
-    await page.click('#continue');
-    await page.click('#finish');
-    await expect(page.locator('[data-test="complete-header"]')).toHaveText('Thank you for your order!');
+    const loginPage = new LoginPage(page);
+    const cart = new CartPage(page);
+    await loginPage.navigation();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.clickLoginButton();
+    await cart.addItemToCart();
+    await cart.openCart();
+    await cart.clickCheckout();
+    await cart.fillCheckoutInfo('TestFirstName','TestLastName','30301');
+    await cart.clickContinue();
+    await cart.clickFinish();
+    await cart.expectOrderCompletionMessage();
 });
 
-test('Проверка фильтрации товаров', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
-    await page.fill('#user-name', 'standard_user');
-    await page.fill('#password', 'secret_sauce');
-    await page.click('#login-button');
-    await page.click('.select_container');
-    await page.selectOption('[data-test="product-sort-container"]', 'lohi');
-    // проверить порядок цен/in progress
+test('Проверить фильтрацию', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventory = new InventoryPage(page);
+    await loginPage.navigation();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await loginPage.clickLoginButton();
+    await inventory.selectFilter();
+    await inventory.selectFilterValue('lohi');
+    await inventory.checkFilter();
 });
