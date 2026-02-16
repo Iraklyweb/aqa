@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "playwright test",
-    "test:report": "playwright test || echo tests failed && npm run report:open",
-    "report:open": "start \"\" \"playwright-report\\index.html\""
+    "report:open": "start \"\" \"playwright-report\\index.html\"",
+    "test:report": "playwright test & npm run report:open"
   },
   "repository": {
     "type": "git",
