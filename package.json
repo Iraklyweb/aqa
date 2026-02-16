@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "playwright test",
-    "test:report": "playwright test; playwright show-report"
+    "test:report": "playwright test && playwright show-report",
+    "test:report:force": "playwright test || playwright show-report"
   },
   "repository": {
     "type": "git",
